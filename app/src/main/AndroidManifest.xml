@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.jh.buildings">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="历史建筑"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activity.MainPageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activity.ImageDisplay"
+            />
+        <activity
+            android:name=".Activity.Literature"
+            android:label="@string/title_activity_literature"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.Street" />
+        <activity android:name=".Activity.Designer" />
+        <activity
+            android:name=".Activity.Associated_people"
+            android:label="@string/title_activity_associated_people"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Style"
+            android:label="@string/title_activity_style"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Unit"
+            android:label="@string/title_activity_unit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:label=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".Activity.UseChange"
+                  ></activity>
+    </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+</manifest>

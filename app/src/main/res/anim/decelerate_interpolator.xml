@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--差值器如下（控制切换速度） -->
+<decelerateInterpolator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:factor="0.5" />

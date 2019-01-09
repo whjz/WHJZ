@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Buildings</string>
+    <string name="title_activity_image_display">ImageDisplay</string>
+    <string name="title_activity_literature">Literature</string>
+    <string name="title_activity_district">District</string>
+    <string name="title_activity_associated_people">Associated_people</string>
+    <string name="title_activity_style">Style</string>
+    <string name="title_activity_unit">Unit</string>
+    <string name="title_activity_buildings_list">Buildings_list</string>
+</resources>

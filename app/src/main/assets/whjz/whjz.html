@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>whjz</title>
+    <script src="js/ol.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="https://openlayers.org/en/v4.6.5/css/ol.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ol-popup {
+            position: absolute;
+            background-color: white;
+            -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+            filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+            padding: 15px 15px 0px 15px;
+            border-radius: 10px;
+            border: 1px solid #cccccc;
+            bottom: 12px;
+            left: -50px;
+            min-width: 250px;
+            height: auto;
+            overflow-y: auto;
+            display: none;
+            -webkit-overflow-scrolling: touch;
+            z-index: 1000;
+        }
+
+        .ol-popup-closer {
+            text-decoration: none;
+            position: absolute;
+            top: 2px;
+            right: 8px;
+        }
+
+        .ol-popup-closer:after {
+            content: "✖";
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map">
+    </div>
+    <div id="popup" class="ol-popup">
+        <div class="pophead" style="width:100%;height: 20px;">
+            <div id="popup-title" style="font:bold 15px sans-serif; align:left;position: absolute;top: 5px;left: 8px;color: #000000">属性信息</div>
+            <a href="#" id="popup-closer" class="ol-popup-closer" style="color:#8e908c;"></a>
+        </div>
+        <img src="img/nophoto.png" id="imgPopup" style="height:150px; height:150px; padding-left: 10px">
+        <div id="BlockInfo" style="padding-top:10px;">
+            <!-- <div>
+                <span>编号：</span>
+                <span id="jzID"></span>
+            </div> -->
+            <div>
+                <span>行政区：</span>
+                <span id="jzName"></span>
+            </div>
+            <div>
+                <span>级&nbsp;&nbsp;&nbsp;&nbsp;别：</span>
+                <span id="jzLevel"></span>
+            </div>
+            <div style="margin:auto">
+                <span>
+                    <button id="moreDeatiles" type="button" class="btn btn-primary" style="width:225px;margin-top: 10px">详情..</button>
+                    <!-- <a id="moreDeatiles" href="#" style="float:right;font-size: ">更多...</a> -->
+                </span>
+            </div>
+        </div>
+        <br>
+    </div>
+    <script type="text/javascript">
+        //定义高德底图
+        var gaodeMapLayer = new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                url: 'http://webrd03.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scale=1&style=8' //高德地图在线
+            }),
+            projection: 'EPSG:3857'
+        });
+        //定义点图层
+        var pointwfsVectorLayer = new ol.layer.Vector({
+            visible: true,
+            source: new ol.source.Vector({
+                format: new ol.format.GeoJSON({
+                    geometryName: 'geom'
+                }),
+                url: 'http://202.114.41.165:8090/geoserver/whjz/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=whjz:WHJZ&maxFeatures=1000&outputFormat=application%2Fjson&srsname=EPSG:4326'
+            }),
+            maxResolution: 0.000042,
+            style: function (feature, resolution) {
+                propertys = feature.getProperties();
+                //console.log(map.getView().getResolution())
+                if (map.getView().getResolution() < 0.000042) {
+                    switch (propertys.LEVEL) {
+                        case '二级':
+                            return new ol.style.Style({
+                                image: new ol.style.Icon({
+                                    src: 'img/1.png',
+                                    scale: 0.2,
+                                    anchor: [0.5, 1]
+                                }),
+                            })
+                            break;
+                        case '三级':
+                            return new ol.style.Style({
+                                image: new ol.style.Icon({
+                                    src: 'img/3.png',
+                                    scale: 0.2,
+                                    anchor: [0.5, 1]
+                                }),
+                            })
+                            break;
+                        case '一级':
+                            return new ol.style.Style({
+                                image: new ol.style.Icon({
+                                    src: 'img/2.png',
+                                    scale: 0.3,
+                                    anchor: [0.5, 1]
+                                }),
+                            })
+                            break;
+                    }
+                }
+
+            }
+        });
+        //创建注记层
+        var zhujiLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                format: new ol.format.GeoJSON(),
+                url: 'http://202.114.41.165:8090/geoserver/whjz/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=whjz:WHJZ&maxFeatures=1000&outputFormat=application%2Fjson&srsname=EPSG:4326'
+            }),
+            style: function (feature) {
+                console.log(map.getView().getResolution())
+                return new ol.style.Style({
+                    text: new ol.style.Text({
+                        font: '10px 微软雅黑',
+                        text: feature.get('BNAME'),
+                        stroke: new ol.style.Stroke({
+                            color: 'white',
+                            width: 1
+                        }),
+                        fill: new ol.style.Fill({
+                            color: 'red'
+                        })
+                    })
+                })
+            },
+            maxResolution: 0.000021457672119140625
+            
+        });
+
+        var map = new ol.Map({
+            layers: [gaodeMapLayer, pointwfsVectorLayer, zhujiLayer],
+            target: 'map',
+            view: new ol.View({
+                center: [114.302962, 30.567066],
+                zoom: 13,
+                projection: ol.proj.get('EPSG:4326')
+            })
+        });
+
+        //定义地图点击事件，实现弹窗显示
+        map.on('click', function (evt) {
+            var pixel = evt.pixel;
+            var feature = map.forEachFeatureAtPixel(pixel, function (feature) {
+                return feature;
+            });
+            if (feature == null) {
+                return;
+            }
+            if (feature.getId() == null) {
+                return;
+            }
+            $('.ol-popup').css('display', 'block');
+            coordinate = evt.coordinate;
+            displayFeatureInfo(feature);
+        });
+        var whjzResult;
+        var featureBuildID;
+        $.ajax({
+            url: "http://202.114.41.165:8080/WHJZProject/servlet/GetBuildingList",
+            type: 'get',
+            dataType: 'json',
+            success: function (response) {
+                whjzResult = response;
+            }
+        })
+        var displayFeatureInfo = function (feature) {
+            if (feature) {
+                // console.log(feature);
+                // console.log(whjzResult);
+                var properties = feature.getProperties(); //获取属性值对象
+                featureBuildID = properties.BID;
+                var level = properties.RANK;
+                level = level.substring(3,level.length);
+                for (var i = 0; i < whjzResult.length; i++) {
+                    if (properties.BID == whjzResult[i].BuildID) {
+                        imgpath = whjzResult[i].Picture;
+                        document.getElementById('imgPopup').src = 'http://202.114.41.165:8080' + imgpath;
+                        document.getElementById('jzName').innerHTML = whjzResult[i].District;
+                        break;
+                    }
+                    if (i >= whjzResult.length) {
+                        document.getElementById('imgPopup').src = 'img/nophoto.png';
+                        break;
+                    }
+                }
+                document.getElementById('popup-title').innerHTML = properties.BNAME;
+                //document.getElementById('jzID').innerHTML = featureBuildID;
+                document.getElementById('jzLevel').innerHTML = level;
+                overlay.setPosition(coordinate);
+            } else {
+                overlay.setPosition(undefined);
+            }
+        };
+        var pop_container = document.getElementById('popup');
+        var BlockInfo = document.getElementById('BlockInfo');
+        var pop_closer = document.getElementById('popup-closer');
+        var popTitle = document.getElementById('popup-title');
+        var overlay = new ol.Overlay({
+            element: pop_container,
+            autoPan: true, //移动overlay到视图可见
+            autoPanMargin: 50, //移动overlay距离边界距离
+            autoPanAnimation: {
+                duration: 250
+            }
+        });
+        pop_closer.onclick = function () {
+            overlay.setPosition(undefined);
+            pop_closer.blur();
+            return false;
+        };
+        map.addOverlay(overlay);
+
+        //根据建筑数量进行缩聚显示
+        function clusterPoints() {
+            var clusterSource = new ol.source.Cluster({
+                distance: 20,   //距离设置是关键  Minimum distance in pixels between clusters. Default is 20
+                source: pointwfsVectorLayer.getSource()
+            });
+            var styleCache = {};
+            var clusters = new ol.layer.Vector({
+                source: clusterSource,
+                style: function (feature) {
+                    var size = feature.get('features').length;
+                    //var size = 100;
+                    var style = styleCache[size];
+                    if (!style) {
+                        style = new ol.style.Style({
+                            image: new ol.style.Circle({
+                                radius: 7,
+                                stroke: new ol.style.Stroke({
+                                    color: '#fff'
+                                }),
+                                fill: new ol.style.Fill({
+                                    color: 'rgb(124,19,16)'
+                                })
+                            }),
+                            text: new ol.style.Text({
+                                text: size.toString(),
+                                fill: new ol.style.Fill({
+                                    color: '#fff'
+                                })
+                            })
+                        });
+                        styleCache[size] = style;
+                    }
+                    return style;
+                },
+                minResolution: 0.000042
+            });
+            map.addLayer(clusters);
+        }
+        clusterPoints();
+
+        $('#moreDeatiles').click(function () {
+            window.jsInterface.Jump2ItemByID(featureBuildID);
+        })
+    </script>
+</body>
+
+</html>

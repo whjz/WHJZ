@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/BottomNavigationMenu_Map"
+        android:icon="@drawable/map"
+        android:title="地图导览"
+        />
+
+    <item
+        android:id="@+id/BottomNavigationMenu_Building"
+        android:icon="@drawable/list"
+        android:title="建筑列表"
+        />
+</menu>
