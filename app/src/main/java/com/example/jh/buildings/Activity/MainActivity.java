@@ -114,6 +114,12 @@ public class MainActivity extends Activity{
     Map<String,String> UseChange_ChangeOverview = new HashMap<>();
     Map<String,String> UseChange_UseUnit = new HashMap<>();
 
+    //从vedio中读取的数据
+    Map<String,String> Vedio_BuildID = new HashMap<>();
+    Map<String,String> Vedio_ResourceUrl = new HashMap<>();
+    Map<String,String> Vedio_Introduce = new HashMap<>();
+    Map<String,String> Vedio_Name = new HashMap<>();
+
 
     StringBuilder response_designer;
     StringBuilder response_unit;
@@ -121,6 +127,7 @@ public class MainActivity extends Activity{
     StringBuilder response_associatedperson;
     StringBuilder response_researchliterature;
     StringBuilder response_usechange;
+    StringBuilder response_vedio;
 
 
     static String url = "http://202.114.41.165:8080";
@@ -424,9 +431,59 @@ public class MainActivity extends Activity{
 
             }
 
+            if (msg.what == 7){
+                Bundle bundle7 = getIntent().getExtras();
+                int count = 0;
+                for(String getKey:Vedio_BuildID.keySet()){
+                    if (Vedio_BuildID.get(getKey).equals(bundle7.getString("buildid"))){
+                        if (Vedio_Name.get(getKey).equals("null")){
+                            continue;
+                        }
+                        else {
+                            count++;
+                            LinearLayout layout = (LinearLayout)findViewById(R.id.Vedio);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                            TextView tv = new TextView(getApplicationContext());
+                            tv.setText(Vedio_Name.get(getKey));
+                            tv.setTextColor(Color.parseColor("#3399FF"));
+                            layoutParams.setMargins(60,0,20,30);
+                            layout.addView(tv,layoutParams);
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("name",Vedio_Name.get(getKey));
+                            bundle.putString("introduce",Vedio_Introduce.get(getKey));
+                            bundle.putString("resourceurl",Vedio_ResourceUrl.get(getKey));
+                            final  Intent i = new Intent(MainActivity.this,Vedio.class);
+                            i.putExtras(bundle);
+                            tv.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(i);
+
+                                }
+                            });
+
+                        }
+
+                    }
+
+                }
+
+                if (count==0){
+                    LinearLayout Vedio = (LinearLayout)findViewById(R.id.Vedio);
+                    LinearLayout Vedio0 = (LinearLayout)findViewById(R.id.Vedio0);
+                    LinearLayout Vedio1 = (LinearLayout)findViewById(R.id.Vedio1);
+                    Vedio.setVisibility(View.GONE);
+                    Vedio0.setVisibility(View.GONE);
+                    Vedio1.setVisibility(View.GONE);
+                }
+
+
+            }
+
             //为界面中的每个组件绑定数据
             //以下组件的数据可以从buildinglist直接获取
-            if (msg.what == 7){
+            if (msg.what == 8){
                 Bundle bundle = getIntent().getExtras();
                 ImageView pic = (ImageView)findViewById(R.id.build_picture);
                 String url = bundle.getString("picture");
@@ -552,7 +609,7 @@ public class MainActivity extends Activity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         Message msg = new Message();
-        msg.what = 7;
+        msg.what = 8;
         handler.sendMessage(msg);
 
         TextView btn1 = (TextView) findViewById(R.id.more_btn);
@@ -593,6 +650,10 @@ public class MainActivity extends Activity{
         requestUsingHttpURLConnectionGetResearchLiterature();
         //从usechange中读取历史建筑用途变迁的所有数据
         requestUsingHttpURLConnectionGetUseChange();
+        //从vedio中读取指定buildid的相关视频的所有数据
+        Bundle bundle = getIntent().getExtras();
+        String buildid = bundle.getString("buildid");
+        requestUsingHttpURLConnectionGetVedio(buildid);
     }
 
     public void requestUsingHttpURLConnectionGetAllDesigners(){
@@ -875,6 +936,50 @@ public class MainActivity extends Activity{
                     }
                     Message msg = new Message();
                     msg.what = 6;
+                    handler.sendMessage(msg);
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void requestUsingHttpURLConnectionGetVedio(final String build){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection connection = null;
+                try {
+                    URL url = new URL("http://202.114.41.165:8080/WHJZProject/servlet/GetVideoByBuildID/"+build); // 声明一个URL,注意——如果用百度首页实验，请使用https
+                    connection = (HttpURLConnection) url.openConnection(); // 打开该URL连接
+                    connection.setRequestMethod("GET"); // 设置请求方法，“POST或GET”，我们这里用GET，在说到POST的时候再用POST
+                    connection.setConnectTimeout(8000); // 设置连接建立的超时时间
+                    connection.setReadTimeout(8000); // 设置网络报文收发超时时间
+                    InputStream in = connection.getInputStream();  // 通过连接的输入流获取下发报文，然后就是Java的流处理
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    response_vedio = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null){
+                        response_vedio.append(line);
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    JSONArray a = new JSONArray(response_vedio.toString());
+                    for (int i = 0;i < a.length();i++) {
+                        JSONObject b = a.getJSONObject(i);
+                        Vedio_BuildID.put(b.getString("ID"),b.getString("BuildID"));
+                        Vedio_ResourceUrl.put(b.getString("ID"),url + b.getString("ResourceUrl"));
+                        Vedio_Introduce.put(b.getString("ID"),b.getString("Introduce"));
+                        Vedio_Name.put(b.getString("ID"),b.getString("Name"));
+                    }
+                    Message msg = new Message();
+                    msg.what = 7;
                     handler.sendMessage(msg);
                 }
                 catch (JSONException e){
