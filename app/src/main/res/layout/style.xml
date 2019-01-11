@@ -290,6 +290,52 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="#C9C9C9" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_RepresentBuilding1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp">
+
+                <!--
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/icon6" />
+                -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="代表建筑"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColorHint="#000000"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_RepresentBuilding"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp">
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/intro0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -352,6 +398,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp">
             </LinearLayout>
+
+
 
         </LinearLayout>
 
