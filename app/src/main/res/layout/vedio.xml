@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Activity.Vedio"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -40,6 +42,7 @@
                 android:gravity="center"
                 android:textColor="#080808"
                 android:textSize="18sp"
+                android:text="相关视频"
                 android:layout_centerInParent="true"
                 />
         </LinearLayout>
@@ -59,26 +62,28 @@
                 android:layout_height="30dp"
                 android:src="@drawable/home"
                 />
-
         </LinearLayout>
 
 
     </RelativeLayout>
 
-    <cn.jzvd.JzvdStd
-        android:id="@+id/videoplayer"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        />
 
-    <TextView
-        android:id="@+id/intro"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#000000"/>
+
+        <cn.jzvd.JzvdStd
+            android:id="@+id/videoplayer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            />
+
+        <TextView
+            android:id="@+id/vedio_intro"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="#000000"/>
+
 
 </LinearLayout>

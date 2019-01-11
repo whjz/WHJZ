@@ -449,18 +449,19 @@ public class MainActivity extends Activity{
                             layoutParams.setMargins(60,0,20,30);
                             layout.addView(tv,layoutParams);
 
-//                            Bundle bundle = new Bundle();
-//                            bundle.putString("introduce",Vedio_Introduce.get(getKey));
-//                            bundle.putString("resourceurl",Vedio_ResourceUrl.get(getKey));
-//                            final  Intent i = new Intent(MainActivity.this,UseChange.class);
-//                            i.putExtras(bundle);
-//                            tv.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    startActivity(i);
-//
-//                                }
-//                            });
+                            Bundle bundle = new Bundle();
+                            bundle.putString("name",Vedio_Name.get(getKey));
+                            bundle.putString("introduce",Vedio_Introduce.get(getKey));
+                            bundle.putString("resourceurl",Vedio_ResourceUrl.get(getKey));
+                            final  Intent i = new Intent(MainActivity.this,Vedio.class);
+                            i.putExtras(bundle);
+                            tv.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(i);
+
+                                }
+                            });
 
                         }
 
