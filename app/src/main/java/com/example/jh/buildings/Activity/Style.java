@@ -1,6 +1,7 @@
 package com.example.jh.buildings.Activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,9 +12,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,14 +25,40 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.jh.buildings.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class Style extends AppCompatActivity {
+    private String TAG="TAG-Style";
+
     private  View imgBack;
+    private LinearLayout ll_RepresentBuilding;
+    private LinearLayout ll_RepresentBuilding1;
+
+    private String BuildStyleID="";
+    // <BuildID,BuildName>
+    private Map<String,String> Buildings=new LinkedHashMap<>();
+
+    private int MESSAGE_INIT_CONTROLS=1;
+    private int MESSAGE_SHOW_REPRESENT_BUILDINGS=2;
+    private int MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS=3;
 
     private Handler handler = new Handler(){
         public void handleMessage(Message msg){
             super.handleMessage(msg);
-            if (msg.what == 1){
+            if (msg.what == MESSAGE_INIT_CONTROLS){
                 Bundle bundle = getIntent().getExtras();
+                BuildStyleID=bundle.getString("buildstyleid");
+                Log.i("TAG-Style","BuildStyleID: "+BuildStyleID);
 
                 String name = bundle.getString("name");
                 TextView tx_name = (TextView)findViewById(R.id.style_name);
@@ -125,6 +154,39 @@ public class Style extends AppCompatActivity {
                         tx_representativebuildintroduction.setText(Html.fromHtml(representativebuildintroduction));
                     }
                 }
+
+                initRepresentBuilding();
+            }
+            else if(msg.what==MESSAGE_SHOW_REPRESENT_BUILDINGS){
+                if (Buildings.size()>0){
+                    for (final String getKey:Buildings.keySet()){
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        TextView tv = new TextView(getApplicationContext());
+                        tv.setText(Buildings.get(getKey));
+                        tv.setTextColor(Color.parseColor("#3399FF"));
+                        tv.setTextSize(13);
+                        TextPaint tp = tv.getPaint();
+                        tp.setFakeBoldText(true);
+                        layoutParams.setMargins(5,20,15,0);
+                        ll_RepresentBuilding.addView(tv,layoutParams);
+
+                        tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                SearchBuildingByID(getKey);
+                            }
+                        });
+                    }
+                }
+                else {
+                    ll_RepresentBuilding1.setVisibility(View.GONE);
+                }
+            }
+            else if (msg.what==MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS){
+                Bundle bundle=msg.getData();
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.putExtras(bundle);
+                startActivity(i);
             }
         }
     };
@@ -135,8 +197,10 @@ public class Style extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.style);
 
+        initControls();
+
         Message msg = new Message();
-        msg.what = 1;
+        msg.what = MESSAGE_INIT_CONTROLS;
         handler.sendMessage(msg);
 
         imgBack = (LinearLayout)findViewById(R.id.style_back);
@@ -147,5 +211,92 @@ public class Style extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void initControls(){
+        ll_RepresentBuilding=findViewById(R.id.ll_RepresentBuilding);
+        ll_RepresentBuilding1=findViewById(R.id.ll_RepresentBuilding1);
+    }
+
+    private void initRepresentBuilding(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url="http://202.114.41.165:8080/WHJZProject/servlet/GetBuildingStyleRepresents";
+                OkHttpClient client=new OkHttpClient();
+                Request request=new Request.Builder()
+                        .url(url)
+                        .build();
+                try {
+                    Response response=client.newCall(request).execute();
+                    String Data=response.body().string();
+                    Log.i(TAG, String.valueOf(response));
+                    try {
+                        JSONArray Origin=new JSONArray(Data);
+                        for (int i=0;i<Origin.length();i++){
+                            JSONObject Single=Origin.getJSONObject(i);
+                            String StyleID=Single.getString("BuildStyleID");
+                            if (StyleID.equals(BuildStyleID)){
+                                String BuildID=Single.getString("BuildID");
+                                String BuildName=Single.getString("BuildName");
+                                Buildings.put(BuildID,BuildName);
+                            }
+                        }
+
+                        Message msg = new Message();
+                        msg.what = MESSAGE_SHOW_REPRESENT_BUILDINGS;
+                        handler.sendMessage(msg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    private void SearchBuildingByID(final String BuildID){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url="http://202.114.41.165:8080/WHJZProject/servlet/GetBuildingsByBuildID/"+BuildID;
+                OkHttpClient client=new OkHttpClient();
+                Request request=new Request.Builder()
+                        .url(url)
+                        .build();
+                try {
+                    Response response=client.newCall(request).execute();
+                    String Data=response.body().string();
+                    Log.i(TAG, String.valueOf(response));
+
+                    JSONObject Origin=new JSONObject(Data);
+                    JSONArray Result=Origin.getJSONArray("result");
+                    JSONObject Content=Result.getJSONObject(0);
+
+                    Bundle bundle=new Bundle();
+                    bundle.putString("buildid",Content.getString("BuildID"));
+                    bundle.putString("name",Content.getString("Name"));
+                    bundle.putString("year",Content.getString("Year"));
+                    bundle.putString("district",Content.getString("District"));
+                    bundle.putString("introduction",Content.getString("BuildIntroduction"));
+                    bundle.putString("street",Content.getString("Street"));
+                    bundle.putString("styleid",Content.getString("BuildStyleID"));
+                    bundle.putString("use",Content.getString("CurrentUse"));
+                    bundle.putString("value",Content.getString("HistoricalValue"));
+                    bundle.putString("picture","http://202.114.41.165:8080/"+Content.getString("Picture"));
+
+                    Message msg = new Message();
+                    msg.what = MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS;
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

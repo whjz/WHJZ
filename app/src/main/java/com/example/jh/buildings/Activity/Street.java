@@ -53,13 +53,16 @@ public class Street extends Activity{
 
                 String name = Street_Name.get(buildid);
                 TextView tx_name = (TextView)findViewById(R.id.street_name);
-                if (name.equals("null")){tx_name.setText("");}
+                //todo something wrong
+                if (name=="null" || name==null){
+                    tx_name.setText("");
+                }
                 else {tx_name.setText(name);}
 
                 ImageView img_picture = (ImageView)findViewById(R.id.street_picture);
                 String picture = Street_PictureUrl.get(buildid);
                 //Log.i("qwer",picture);
-                if (picture.equals("http://202.114.41.165:8080null")){img_picture.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.nopicture));}
+                if (picture=="http://202.114.41.165:8080null"){img_picture.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.nopicture));}
                 else {
                     Glide.with(getApplicationContext()).load(picture).into(img_picture);
                 }
