@@ -55,9 +55,9 @@ public class Vedio extends Activity {
             if (msg.what == 1){
                 Bundle bundle = getIntent().getExtras();
 
-                String name = bundle.getString("name");
-                TextView tx_name = (TextView)findViewById(R.id.vedio_name);
-                tx_name.setText(name);
+//                String name = bundle.getString("name");
+//                TextView tx_name = (TextView)findViewById(R.id.vedio_name);
+//                tx_name.setText(name);
 
                 String introduce = bundle.getString("introduce");
                 TextView tx_introduce = (TextView)findViewById(R.id.vedio_intro);
