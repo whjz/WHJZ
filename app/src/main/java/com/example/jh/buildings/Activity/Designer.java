@@ -3,6 +3,7 @@ package com.example.jh.buildings.Activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,9 +11,11 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,8 +25,31 @@ import com.bumptech.glide.Glide;
 import com.example.jh.buildings.Activity.MainActivity;
 import com.example.jh.buildings.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class Designer extends Activity{
     private View imgBack;
+    private LinearLayout ll_DesignerRepresentBuilding1;
+    private LinearLayout ll_DesignerRepresentBuilding2;
+    private LinearLayout ll_DesignerRepresentBuilding;
+
+    private String DesignerID="";
+    // <BuildID,BuildName>
+    private Map<String,String> RepresentBuildings=new LinkedHashMap<>();
+
+    private String TAG="TAG-Designer";
+    private int MESSAGE_GET_DESIGNER_REPRESENT_BUILDINGS_DATA=2;
+    private int MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS=3;
 
     //为设计师界面中的组件绑定数据
     private Handler handler = new Handler(){
@@ -33,6 +59,8 @@ public class Designer extends Activity{
                 Bundle bundle = getIntent().getExtras();
 
                 String name = bundle.getString("name");
+                DesignerID=bundle.getString("DesignerID");
+                Log.i(TAG,"DesignerID: "+DesignerID);
                 TextView tx_name = (TextView)findViewById(R.id.designer_name);
                 if (name.equals("null")) {tx_name.setText("");}
                 else {tx_name.setText(name);}
@@ -128,6 +156,39 @@ public class Designer extends Activity{
                     //Log.i("eeeee","sss");
                 }
 
+                initDesignerRepresentBuildings();
+            }
+            else if (msg.what==MESSAGE_GET_DESIGNER_REPRESENT_BUILDINGS_DATA){
+                if (RepresentBuildings.size()>0){
+                    for (final String getKey:RepresentBuildings.keySet()){
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        TextView tv = new TextView(getApplicationContext());
+                        tv.setText(RepresentBuildings.get(getKey));
+                        tv.setTextColor(Color.parseColor("#3399FF"));
+                        tv.setTextSize(13);
+                        TextPaint tp = tv.getPaint();
+                        tp.setFakeBoldText(true);
+                        layoutParams.setMargins(5,20,15,0);
+                        ll_DesignerRepresentBuilding.addView(tv,layoutParams);
+
+                        tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                SearchBuildingByID(getKey);
+                            }
+                        });
+                    }
+                }
+                else {
+                    ll_DesignerRepresentBuilding1.setVisibility(View.GONE);
+                    ll_DesignerRepresentBuilding2.setVisibility(View.GONE);
+                }
+            }
+            else if (msg.what==MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS){
+                Bundle bundle=msg.getData();
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.putExtras(bundle);
+                startActivity(i);
             }
         }
     };
@@ -136,6 +197,8 @@ public class Designer extends Activity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.designer);
+
+        initControls();
 
         Message msg = new Message();
         msg.what = 1;
@@ -152,6 +215,99 @@ public class Designer extends Activity{
             }
         });
 
+    }
+
+    public void initControls(){
+        ll_DesignerRepresentBuilding1=findViewById(R.id.ll_DesignerRepresentBuilding1);
+        ll_DesignerRepresentBuilding2=findViewById(R.id.ll_DesignerRepresentBuilding2);
+        ll_DesignerRepresentBuilding=findViewById(R.id.ll_DesignerRepresentBuilding);
+    }
+
+    public void initDesignerRepresentBuildings(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //Todo check the url
+                String url="http://202.114.41.165:8080/WHJZProject/servlet/GetDesignerRepresentsList";
+                OkHttpClient client=new OkHttpClient();
+                Request request=new Request.Builder()
+                        .url(url)
+                        .build();
+                try {
+                    Response response=client.newCall(request).execute();
+                    String Data=response.body().string();
+                    Log.i(TAG, Data);
+                    JSONObject Origin=new JSONObject(Data);
+
+                    boolean Status=Origin.getBoolean("status");
+                    Log.i(TAG,"Status: "+Status);
+                    if (Status){
+                        JSONArray Result=Origin.getJSONArray("result");
+                        for (int i=0;i<Result.length();i++){
+                            JSONObject SingleData=Result.getJSONObject(i);
+                            String ID=SingleData.getString("DesignerID");
+                            if (ID.equals(DesignerID)){
+                                String BuildID=SingleData.getString("BuildID");
+                                String BuildName=SingleData.getString("BuildName");
+                                Log.i(TAG,"BuildID: "+BuildID+" BuildName: "+BuildName);
+                                RepresentBuildings.put(BuildID,BuildName);
+                            }
+                        }
+                    }
+
+                    Message message=new Message();
+                    message.what=MESSAGE_GET_DESIGNER_REPRESENT_BUILDINGS_DATA;
+                    handler.sendMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void SearchBuildingByID(final String BuildID){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url="http://202.114.41.165:8080/WHJZProject/servlet/GetBuildingsByBuildID/"+BuildID;
+                OkHttpClient client=new OkHttpClient();
+                Request request=new Request.Builder()
+                        .url(url)
+                        .build();
+                try {
+                    Response response=client.newCall(request).execute();
+                    String Data=response.body().string();
+                    Log.i(TAG, String.valueOf(response));
+
+                    JSONObject Origin=new JSONObject(Data);
+                    JSONArray Result=Origin.getJSONArray("result");
+                    JSONObject Content=Result.getJSONObject(0);
+
+                    Bundle bundle=new Bundle();
+                    bundle.putString("buildid",Content.getString("BuildID"));
+                    bundle.putString("name",Content.getString("Name"));
+                    bundle.putString("year",Content.getString("Year"));
+                    bundle.putString("district",Content.getString("District"));
+                    bundle.putString("introduction",Content.getString("BuildIntroduction"));
+                    bundle.putString("street",Content.getString("Street"));
+                    bundle.putString("styleid",Content.getString("BuildStyleID"));
+                    bundle.putString("use",Content.getString("CurrentUse"));
+                    bundle.putString("value",Content.getString("HistoricalValue"));
+                    bundle.putString("picture","http://202.114.41.165:8080/"+Content.getString("Picture"));
+
+                    Message msg = new Message();
+                    msg.what = MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS;
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
 }

@@ -41,6 +41,8 @@
 
 
               <LinearLayout
+                  android:layout_toRightOf="@+id/main_back"
+                  android:layout_toLeftOf="@+id/ll_home"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_centerInParent="true"
@@ -48,6 +50,8 @@
                   >
               <TextView
                   android:id="@+id/txtView_ItemName"
+                  android:ellipsize="end"
+                  android:singleLine="true"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_gravity="center"
@@ -62,6 +66,7 @@
 
 
               <LinearLayout
+                  android:id="@+id/ll_home"
                   android:layout_width="70dp"
                   android:layout_height="wrap_content"
                   android:layout_alignParentRight="true"

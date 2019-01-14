@@ -43,6 +43,7 @@ public class Style extends AppCompatActivity {
     private  View imgBack;
     private LinearLayout ll_RepresentBuilding;
     private LinearLayout ll_RepresentBuilding1;
+    private LinearLayout ll_RepresentBuilding2;
 
     private String BuildStyleID="";
     // <BuildID,BuildName>
@@ -180,6 +181,7 @@ public class Style extends AppCompatActivity {
                 }
                 else {
                     ll_RepresentBuilding1.setVisibility(View.GONE);
+                    ll_RepresentBuilding2.setVisibility(View.GONE);
                 }
             }
             else if (msg.what==MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS){
@@ -216,6 +218,7 @@ public class Style extends AppCompatActivity {
     private void initControls(){
         ll_RepresentBuilding=findViewById(R.id.ll_RepresentBuilding);
         ll_RepresentBuilding1=findViewById(R.id.ll_RepresentBuilding1);
+        ll_RepresentBuilding2=findViewById(R.id.ll_RepresentBuilding2);
     }
 
     private void initRepresentBuilding(){
@@ -230,7 +233,7 @@ public class Style extends AppCompatActivity {
                 try {
                     Response response=client.newCall(request).execute();
                     String Data=response.body().string();
-                    Log.i(TAG, String.valueOf(response));
+                    Log.i(TAG, Data);
                     try {
                         JSONArray Origin=new JSONArray(Data);
                         for (int i=0;i<Origin.length();i++){
