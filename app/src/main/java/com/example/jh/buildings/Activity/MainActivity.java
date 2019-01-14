@@ -146,6 +146,7 @@ public class MainActivity extends Activity{
                     txde.setText(s);
                     String buildid = bundle1.getString("buildid");
                     final Bundle bundle2 = new Bundle();
+                    bundle2.putString("DesignerID",DesignerID.get(buildid));
                     bundle2.putString("name", Name.get(buildid));
                     bundle2.putString("birthday", Birthday.get(buildid));
                     bundle2.putString("nativeplace", NativePlace.get(buildid));
@@ -185,6 +186,7 @@ public class MainActivity extends Activity{
                     //为Unit界面传递数据
                     String buildid = bundle1.getString("buildid");
                     final Bundle bundle2 = new Bundle();
+                    bundle2.putString("BuildUnitID",Unit_BuildUnitID.get(buildid));
                     bundle2.putString("name",Unit_Name.get(buildid));
                     bundle2.putString("introduction", Unit_Introduction.get(buildid));
                     bundle2.putString("representativeworks", Unit_Representativeworks.get(buildid));
