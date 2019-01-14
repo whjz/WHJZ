@@ -49,3 +49,8 @@ captures/
 # Keystore files
 *.jks
 
+# others by ourselves
+.idea
+/.app/build
+/.app/debug
+/.app/release
