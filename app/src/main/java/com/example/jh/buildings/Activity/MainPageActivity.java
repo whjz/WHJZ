@@ -145,6 +145,7 @@ public class MainPageActivity extends Activity{
 
         // BottomNavigationViewer.getMenu().findItem(R.id.BottomNavigationMenu_Building).setChecked(true);
         Log.i("TAG","MainPageActivity create fragment");
+        Log.i("TAG","BuildID: "+buildID);
 
         // The fragemntBuilding has been created,then jump to the item
         fragemntBuilding.Jump2ListViewItemByID(BuildID);
