@@ -75,7 +75,6 @@ public class MainActivity extends Activity{
     Map<String,String> Unit_PictureUrl = new HashMap<>();
 
     //从buildingstyle中读取出的数据
-    Map<String,String> Style_BuildID = new HashMap<>();
     Map<String,String> Style_Name = new HashMap<>();
     Map<String,String> Style_RepresentativeBuildIntroduction = new HashMap<>();
     Map<String,String> Style_Style = new HashMap<>();
@@ -219,13 +218,13 @@ public class MainActivity extends Activity{
 
                 int count = 0;
 
-                for(String getKey:Style_BuildID.keySet()){
-                    if(Style_BuildID.get(getKey).equals(bundle3.getString("buildid"))){
+                for(String getKey:Style_BuildStyleID.keySet()){
+                    if(Style_BuildStyleID.get(getKey).equals(bundle3.getString("styleid"))){
                         count++;
                         LinearLayout layout = (LinearLayout)findViewById(R.id.Construction_style);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                         TextView tv = new TextView(getApplicationContext());
-                        tv.setText(Style_Name.get(getKey));
+                        tv.setText(Style_Name.get(bundle3.getString("styleid")));
                         tv.setTextColor(Color.parseColor("#3399FF"));
                         tv.setTextSize(13);
                         TextPaint tp = tv.getPaint();
@@ -234,8 +233,8 @@ public class MainActivity extends Activity{
                         layout.addView(tv,layoutParams);
 
                         Bundle bundle = new Bundle();
-                        bundle.putString("name",Style_Name.get(getKey));
-                        bundle.putString("buildstyleid",Style_BuildStyleID.get(getKey));
+                        bundle.putString("name",Style_Name.get(bundle3.getString("styleid")));
+                        bundle.putString("buildstyleid",bundle3.getString("styleid"));
                         bundle.putString("picture",Style_Picture.get(getKey));
                         bundle.putString("style",Style_Style.get(getKey));
                         bundle.putString("currentuse",Style_CurrentUse.get(getKey));
@@ -300,11 +299,23 @@ public class MainActivity extends Activity{
                         count++;
                         LinearLayout layout = (LinearLayout)findViewById(R.id.Associated_layout);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        LinearLayout samlllayout = new LinearLayout(getApplicationContext());
+                        LinearLayout.LayoutParams samlllayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        samlllayout.setOrientation(LinearLayout.HORIZONTAL);
                         TextView tv = new TextView(getApplicationContext());
                         tv.setText(AssociatedPerson_Name.get(getKey));
                         tv.setTextColor(Color.parseColor("#3399FF"));
-                        layoutParams.setMargins(60,0,20,30);
-                        layout.addView(tv,layoutParams);
+                        TextView tvv = new TextView(getApplicationContext());
+                        tvv.setText("："+AssociatedPerson_AssocaiteIntroduce.get(getKey));
+                        tvv.setTextColor(Color.parseColor("#000000"));
+
+                        //layoutParams.setMargins(60,0,20,30);
+                        samlllayoutParams.setMargins(60,0,0,10);
+                        samlllayout.addView(tv,samlllayoutParams);
+                        samlllayoutParams.setMargins(0,0,0,10);
+                        samlllayout.addView(tvv,samlllayoutParams);
+                        layoutParams.setMargins(60,0,20,10);
+                        layout.addView(samlllayout,layoutParams);
 
                         Bundle bundle = new Bundle();
                         bundle.putString("name",AssociatedPerson_Name.get(getKey));
@@ -396,24 +407,33 @@ public class MainActivity extends Activity{
                             LinearLayout layout = (LinearLayout)findViewById(R.id.Use_change);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                             TextView tv = new TextView(getApplicationContext());
-                            tv.setText(UseChange_ChangeTime.get(getKey));
-                            tv.setTextColor(Color.parseColor("#3399FF"));
+                            tv.setMovementMethod(LinkMovementMethod.getInstance());
+                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                                tv.setText(UseChange_ChangeTime.get(getKey)+"："+Html.fromHtml(UseChange_ChangeOverview.get(getKey),Html.FROM_HTML_MODE_COMPACT));
+                                //tx_style.setText(Html.fromHtml(UseChange_ChangeOverview.get(getKey),Html.FROM_HTML_MODE_COMPACT));
+                            }
+                            else{
+                                tv.setText(UseChange_ChangeTime.get(getKey)+"："+Html.fromHtml(UseChange_ChangeOverview.get(getKey)));
+                                //tx_style.setText(Html.fromHtml(style));
+                            }
+                            //tv.setText(UseChange_ChangeTime.get(getKey)+":"+UseChange_ChangeOverview.get(getKey));
+                            tv.setTextColor(Color.parseColor("#000000"));
                             layoutParams.setMargins(60,0,20,30);
                             layout.addView(tv,layoutParams);
 
-                            Bundle bundle = new Bundle();
-                            bundle.putString("changetime",UseChange_ChangeTime.get(getKey));
-                            bundle.putString("useunit",UseChange_UseUnit.get(getKey));
-                            bundle.putString("changeoverview",UseChange_ChangeOverview.get(getKey));
-                            final  Intent i = new Intent(MainActivity.this,UseChange.class);
-                            i.putExtras(bundle);
-                            tv.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(i);
-
-                                }
-                            });
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("changetime",UseChange_ChangeTime.get(getKey));
+//                            bundle.putString("useunit",UseChange_UseUnit.get(getKey));
+//                            bundle.putString("changeoverview",UseChange_ChangeOverview.get(getKey));
+//                            final  Intent i = new Intent(MainActivity.this,UseChange.class);
+//                            i.putExtras(bundle);
+//                            tv.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    startActivity(i);
+//
+//                                }
+//                            });
 
                         }
 
@@ -737,9 +757,8 @@ public class MainActivity extends Activity{
                     JSONArray a = new JSONArray(response_style.toString());
                     for (int i = 0;i < a.length();i++) {
                         JSONObject b = a.getJSONObject(i);
-                        Style_BuildID.put(b.getString("id"),b.getString("BuildID"));
                         Style_BuildStyleID.put(b.getString("id"),b.getString("BuildStyleID"));
-                        Style_Name.put(b.getString("id"),b.getString("Name"));
+                        Style_Name.put(b.getString("BuildStyleID"),b.getString("Name"));
                         Style_RepresentativeBuildIntroduction.put(b.getString("id"),b.getString("RepresentativeBuildIntroduction"));
                         Style_Style.put(b.getString("id"),b.getString("Style"));
                         Style_Picture.put(b.getString("id"),url + b.getString("Picture"));

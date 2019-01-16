@@ -213,7 +213,25 @@ public class Style extends AppCompatActivity {
                 finish();
             }
         });
+
+        TextView more_style_pic = (TextView)findViewById(R.id.more_style_btn);
+        Bundle bundle = getIntent().getExtras();
+        String buildstyleid = bundle.getString("buildstyleid");
+        String name = bundle.getString("name");
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("buildstyleid",buildstyleid);
+        bundle1.putString("name",name);
+        Intent i = new Intent(Style.this,BuildingStyleImageDisplay.class);
+        i.putExtras(bundle1);
+        more_style_pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(i);
+            }
+        });
     }
+
+
 
     private void initControls(){
         ll_RepresentBuilding=findViewById(R.id.ll_RepresentBuilding);

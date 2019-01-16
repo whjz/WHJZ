@@ -84,7 +84,7 @@ public class Street extends Activity{
 
                 ImageView img_picture = (ImageView)findViewById(R.id.street_picture);
                 String picture = Street_PictureUrl.get(buildid);
-                //Log.i("qwer",picture);
+                Log.i("qwer",picture);
                 if (picture=="http://202.114.41.165:8080null"){img_picture.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.nopicture));}
                 else {
                     Glide.with(getApplicationContext()).load(picture).into(img_picture);

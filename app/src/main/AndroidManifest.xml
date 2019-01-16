@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jh.buildings">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -9,16 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.MainPageActivity"
-            >
+        <activity android:name=".Activity.BuildingStyleImageDisplay"></activity>
+        <activity android:name=".Activity.MainPageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.ImageDisplay"
-            />
+        <activity android:name=".Activity.ImageDisplay" />
         <activity
             android:name=".Activity.Literature"
             android:label="@string/title_activity_literature"
@@ -40,18 +42,12 @@
         <activity
             android:name=".Activity.MainActivity"
             android:label=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity android:name=".Activity.UseChange"
-                  ></activity>
-
-        <activity android:name=".Activity.Vedio"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.UseChange" />
+        <activity
+            android:name=".Activity.Vedio"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            ></activity>
+            android:screenOrientation="portrait" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 </manifest>

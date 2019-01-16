@@ -73,8 +73,8 @@ public class Unit extends AppCompatActivity {
 
                 String introduction = bundle.getString("introduction");
                 TextView tx_introduction = (TextView)findViewById(R.id.unit_introduction);
-                LinearLayout intro00 = (LinearLayout)findViewById(R.id.intro00);
-                LinearLayout intro0 = (LinearLayout)findViewById(R.id.intro0);
+                LinearLayout intro00 = (LinearLayout)findViewById(R.id.intro0);
+                LinearLayout intro0 = (LinearLayout)findViewById(R.id.intro00);
                 LinearLayout intro1 = (LinearLayout)findViewById(R.id.intro1);
                 if (introduction.equals("null")){
                     intro0.setVisibility(View.GONE);
@@ -91,25 +91,26 @@ public class Unit extends AppCompatActivity {
                     }
                 }
 
-                String representativeworks = bundle.getString("representativeworks");
-                TextView tx_representativeworks = (TextView)findViewById(R.id.unit_representativeworks);
-                LinearLayout works_intro0 = (LinearLayout)findViewById(R.id.works_intro0);
-                LinearLayout works_intro1 = (LinearLayout)findViewById(R.id.works_intro1);
-                LinearLayout works_intro2 = (LinearLayout)findViewById(R.id.works_intro2);
-                if (representativeworks.equals("null")){
-                    works_intro0.setVisibility(View.GONE);
-                    works_intro1.setVisibility(View.GONE);
-                    works_intro2.setVisibility(View.GONE);
-                }
-                else {
-                    tx_representativeworks.setMovementMethod(LinkMovementMethod.getInstance());
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                        tx_representativeworks.setText(Html.fromHtml(representativeworks,Html.FROM_HTML_MODE_COMPACT));
-                    }
-                    else{
-                        tx_representativeworks.setText(Html.fromHtml(representativeworks));
-                    }
-                }
+//                String representativeworks = bundle.getString("representativeworks");
+//                TextView tx_representativeworks = (TextView)findViewById(R.id.unit_representativeworks);
+//                LinearLayout works_intro0 = (LinearLayout)findViewById(R.id.works_intro0);
+//                LinearLayout works_intro1 = (LinearLayout)findViewById(R.id.works_intro1);
+//                LinearLayout works_intro2 = (LinearLayout)findViewById(R.id.works_intro2);
+//                //Log.i("QWSA",introduction);
+//                if (representativeworks.equals("null")){
+//                    works_intro0.setVisibility(View.GONE);
+//                    works_intro1.setVisibility(View.GONE);
+//                    works_intro2.setVisibility(View.GONE);
+//                }
+//                else {
+//                    tx_representativeworks.setMovementMethod(LinkMovementMethod.getInstance());
+//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+//                        tx_representativeworks.setText(Html.fromHtml(representativeworks,Html.FROM_HTML_MODE_COMPACT));
+//                    }
+//                    else{
+//                        tx_representativeworks.setText(Html.fromHtml(representativeworks));
+//                    }
+//                }
 
                 String founderintroduction = bundle.getString("founderintroduction");
                 TextView tx_founderintroduction = (TextView)findViewById(R.id.unit_founderintroduction);
