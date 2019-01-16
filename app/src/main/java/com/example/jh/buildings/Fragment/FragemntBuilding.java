@@ -7,11 +7,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -64,6 +67,10 @@ public class FragemntBuilding extends Fragment {
                 buildingListAdapter=new BuildingListAdapter(getActivity(),itemBuildingList);
                 listView.setAdapter(buildingListAdapter);
             }
+            else if (msg.what == MESSAGE_SEARCH_DATA_FOR_EDITVIEW_FINISH){
+                buildingListAdapter=new BuildingListAdapter(getActivity(),SearchResultData);
+                listView.setAdapter(buildingListAdapter);
+            }
         }
 
     };
@@ -71,6 +78,13 @@ public class FragemntBuilding extends Fragment {
     private View view;
     private ListView listView;
     private String name;
+
+    private EditText edtTxt_fragment_alert_numOfCar;
+    //存放BuildingListAdapter所需的数据 - 查询结果
+    private List<BuildingListBean> SearchResultData=new ArrayList<>();
+
+    private String TAG="TAG-FragmentBuilding";
+    private int MESSAGE_SEARCH_DATA_FOR_EDITVIEW_FINISH=2;
 
     @Nullable
     @Override
@@ -129,6 +143,34 @@ public class FragemntBuilding extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        edtTxt_fragment_alert_numOfCar=view.findViewById(R.id.edtTxt_fragment_alert_numOfCar);
+        edtTxt_fragment_alert_numOfCar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i(TAG,"Before Chaged");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i(TAG,"Text Changed");
+                if (charSequence.equals(null)){
+                    Message message=new Message();
+                    message.what=1;
+                    handler.sendMessage(message);
+                }
+                else {
+                    String s=charSequence.toString();
+                    SearchAndReloadListView(s);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.i(TAG,"After Changed");
+            }
+        });
+
         return view;
     }
 
@@ -245,5 +287,26 @@ public class FragemntBuilding extends Fragment {
             Log.i("TAG","exception");
             return;
         }
+    }
+
+    private void SearchAndReloadListView(String SearchSentence){
+        Log.i(TAG,"SearchSentence is: "+SearchSentence);
+        SearchResultData.clear();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i=0;i<itemBuildingList.size();i++){
+                    BuildingListBean bean=itemBuildingList.get(i);
+                    String Name=bean.getName();
+                    if (Name.contains(SearchSentence)){
+                        SearchResultData.add(bean);
+                    }
+                }
+                Message message=new Message();
+                message.what=MESSAGE_SEARCH_DATA_FOR_EDITVIEW_FINISH;
+                handler.sendMessage(message);
+            }
+        }).start();
     }
 }

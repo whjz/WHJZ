@@ -209,9 +209,9 @@ public class Street extends Activity{
                     Log.i(TAG, Data);
                     JSONObject Origin=new JSONObject(Data);
 
-                    boolean Satatus=Origin.getBoolean("status");
-                    Log.i(TAG,"Status: "+Satatus);
-                    if (Satatus){
+                    boolean Status=Origin.getBoolean("status");
+                    Log.i(TAG,"Status: "+Status);
+                    if (Status){
                         JSONArray Result=Origin.getJSONArray("result");
                         for (int i=0;i<Result.length();i++){
                             JSONObject SingleData=Result.getJSONObject(i);
