@@ -91,25 +91,25 @@ public class Street extends Activity{
                 }
 
 
-                String District = Street_District.get(buildid);
-                TextView tx_District = (TextView)findViewById(R.id.street_district);
-                LinearLayout district00 = (LinearLayout)findViewById(R.id.district00);
-                LinearLayout district0 = (LinearLayout)findViewById(R.id.district0);
-                LinearLayout district1 = (LinearLayout)findViewById(R.id.district1);
-                if (District.equals("null")){
-                    district0.setVisibility(View.GONE);
-                    district1.setVisibility(View.GONE);
-                    district00.setVisibility(View.GONE);
-                }
-                else {
-                    tx_District.setMovementMethod(LinkMovementMethod.getInstance());
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                        tx_District.setText(Html.fromHtml(District,Html.FROM_HTML_MODE_COMPACT));
-                    }
-                    else{
-                        tx_District.setText(Html.fromHtml(District));
-                    }
-                }
+//                String District = Street_District.get(buildid);
+//                TextView tx_District = (TextView)findViewById(R.id.street_district);
+//                LinearLayout district00 = (LinearLayout)findViewById(R.id.district00);
+//                LinearLayout district0 = (LinearLayout)findViewById(R.id.district0);
+//                LinearLayout district1 = (LinearLayout)findViewById(R.id.district1);
+//                if (District.equals("null")){
+//                    district0.setVisibility(View.GONE);
+//                    district1.setVisibility(View.GONE);
+//                    district00.setVisibility(View.GONE);
+//                }
+//                else {
+//                    tx_District.setMovementMethod(LinkMovementMethod.getInstance());
+//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+//                        tx_District.setText(Html.fromHtml(District,Html.FROM_HTML_MODE_COMPACT));
+//                    }
+//                    else{
+//                        tx_District.setText(Html.fromHtml(District));
+//                    }
+//                }
 
 
                 String Introduction = Street_Introduction.get(buildid);

@@ -125,6 +125,63 @@
 
 
             <LinearLayout
+                android:id="@+id/BuildStyleIntroduction0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="#C9C9C9" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/BuildStyleIntroduction1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                >
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/icon21" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="风格简介"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColorHint="#000000"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/BuildStyleIntroduction2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/BuildStyleIntroduction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#000000"
+                    android:textColorLink="#3399FF"
+                    android:lineSpacingMultiplier="1.5"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/Construction_style0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -141,17 +198,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp">
+                >
 
-                <!--
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_gravity="left"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/icon6" />
-                -->
+                    android:src="@drawable/icon16" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -199,16 +256,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp">
-                <!--
+                >
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_gravity="left"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/icon6" />
-                 -->
+                    android:src="@drawable/icon10" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -260,17 +317,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp">
+                >
 
-                <!--
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_gravity="left"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/icon6" />
-                -->
+                    android:src="@drawable/icon11" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -317,9 +374,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp">
+                >
 
-                <!--
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
@@ -327,7 +384,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/icon6" />
-                -->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -348,7 +405,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/intro0"
+                android:id="@+id/other_style0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -360,50 +417,52 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/intro1"
+                android:id="@+id/other_style1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp">
+                >
 
-                <!--
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_gravity="left"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/icon6" />
-                -->
+                    android:src="@drawable/icon17" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:hint="代表建筑简介"
+                    android:hint="其他风格"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColorHint="#000000"/>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/intro2"
+                android:id="@+id/other_style"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp">
 
-                <TextView
-                    android:id="@+id/style_representativebuildintroduction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="5dp"
-                    android:textColor="#000000"
-                    android:textColorLink="#3399FF"
-                    android:lineSpacingMultiplier="1.5"
-                    />
+                <!--<TextView-->
+                    <!--android:id="@+id/other_buildstyle"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginBottom="5dp"-->
+                    <!---->
+                    <!--android:textColor="#000000"-->
+                    <!--android:textColorLink="#3399FF"-->
+                    <!--android:lineSpacingMultiplier="1.5"-->
+                    <!--/>-->
             </LinearLayout>
 
             <LinearLayout

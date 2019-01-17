@@ -29,7 +29,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -52,6 +59,17 @@ public class Style extends AppCompatActivity {
     private int MESSAGE_INIT_CONTROLS=1;
     private int MESSAGE_SHOW_REPRESENT_BUILDINGS=2;
     private int MESSAGE_GOTO_ACTIVITY_SHOW_REPRESENT_BUILDINGS=3;
+
+    //从buildingstyle中读取出的数据
+    Map<String,String> Style_Name = new HashMap<>();
+    Map<String,String> Style_Style = new HashMap<>();
+    Map<String,String> Style_Picture = new HashMap<>();
+    Map<String,String> Style_CurrentUse = new HashMap<>();
+    Map<String,String> Style_HistoricalValue = new HashMap<>();
+    Map<String,String> Style_BuildStyleID = new HashMap<>();
+
+    StringBuilder response_style;
+    static String url = "http://202.114.41.165:8080";
 
     private Handler handler = new Handler(){
         public void handleMessage(Message msg){
@@ -136,23 +154,23 @@ public class Style extends AppCompatActivity {
                     }
                 }
 
-                String representativebuildintroduction = bundle.getString("representativebuildintroduction");
-                TextView tx_representativebuildintroduction = (TextView)findViewById(R.id.style_representativebuildintroduction);
-                LinearLayout intro0 = (LinearLayout)findViewById(R.id.intro0);
-                LinearLayout intro1 = (LinearLayout)findViewById(R.id.intro1);
-                LinearLayout intro2 = (LinearLayout)findViewById(R.id.intro2);
-                if (representativebuildintroduction.equals("null")){
-                    intro0.setVisibility(View.GONE);
-                    intro1.setVisibility(View.GONE);
-                    intro2.setVisibility(View.GONE);
+                String BuildStyleIntroduction = bundle.getString("BuildStyleIntroduction");
+                TextView tx_BuildStyleIntroduction = (TextView)findViewById(R.id.BuildStyleIntroduction);
+                LinearLayout BuildStyleIntroduction0 = (LinearLayout)findViewById(R.id.BuildStyleIntroduction0);
+                LinearLayout BuildStyleIntroduction1 = (LinearLayout)findViewById(R.id.BuildStyleIntroduction1);
+                LinearLayout BuildStyleIntroduction2 = (LinearLayout)findViewById(R.id.BuildStyleIntroduction2);
+                if (BuildStyleIntroduction.equals("null")){
+                    BuildStyleIntroduction0.setVisibility(View.GONE);
+                    BuildStyleIntroduction1.setVisibility(View.GONE);
+                    BuildStyleIntroduction2.setVisibility(View.GONE);
                 }
                 else {
-                    tx_representativebuildintroduction.setMovementMethod(LinkMovementMethod.getInstance());
+                    tx_BuildStyleIntroduction.setMovementMethod(LinkMovementMethod.getInstance());
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                        tx_representativebuildintroduction.setText(Html.fromHtml(representativebuildintroduction,Html.FROM_HTML_MODE_COMPACT));
+                        tx_BuildStyleIntroduction.setText(Html.fromHtml(BuildStyleIntroduction,Html.FROM_HTML_MODE_COMPACT));
                     }
                     else{
-                        tx_representativebuildintroduction.setText(Html.fromHtml(representativebuildintroduction));
+                        tx_BuildStyleIntroduction.setText(Html.fromHtml(BuildStyleIntroduction));
                     }
                 }
 
@@ -190,6 +208,45 @@ public class Style extends AppCompatActivity {
                 i.putExtras(bundle);
                 startActivity(i);
             }
+
+            else if(msg.what == 4){
+                Log.i("LLL", "wwww");
+                Bundle bundle = getIntent().getExtras();
+                String buildstyle = bundle.getString("buildstyleid");
+                for (String getkey:Style_Name.keySet()){
+                    if (getkey.equals(buildstyle)||getkey.equals("null")){
+                        continue;
+                    }
+                    else {
+                        LinearLayout layout = (LinearLayout)findViewById(R.id.other_style);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        TextView tv = new TextView(getApplicationContext());
+                        tv.setText(Style_Name.get(getkey));
+                        tv.setTextColor(Color.parseColor("#3399FF"));
+                        tv.setTextSize(13);
+                        TextPaint tp = tv.getPaint();
+                        tp.setFakeBoldText(true);
+                        layoutParams.setMargins(5,20,15,0);
+                        layout.addView(tv,layoutParams);
+
+
+                        bundle.putString("name",Style_Name.get(getkey));
+                        bundle.putString("buildstyleid",getkey);
+                        bundle.putString("picture",Style_Picture.get(getkey));
+                        bundle.putString("style",Style_Style.get(getkey));
+                        bundle.putString("currentuse",Style_CurrentUse.get(getkey));
+                        bundle.putString("historicalvalue",Style_HistoricalValue.get(getkey));
+                        final Intent i = new Intent(Style.this,Style.class);
+                        i.putExtras(bundle);
+                        tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(i);
+                            }
+                        });
+                    }
+                }
+            }
         }
     };
 
@@ -204,6 +261,8 @@ public class Style extends AppCompatActivity {
         Message msg = new Message();
         msg.what = MESSAGE_INIT_CONTROLS;
         handler.sendMessage(msg);
+
+
 
         imgBack = (LinearLayout)findViewById(R.id.style_back);
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -229,6 +288,9 @@ public class Style extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        //Log.i("LLL", "eee");
+        requestUsingHttpURLConnectionGetBuildingStyle();
     }
 
 
@@ -315,6 +377,52 @@ public class Style extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void requestUsingHttpURLConnectionGetBuildingStyle(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection connection = null;
+                try {
+                    URL url = new URL("http://202.114.41.165:8080/WHJZProject/servlet/GetBuildingStyle"); // 声明一个URL,注意——如果用百度首页实验，请使用https
+                    connection = (HttpURLConnection) url.openConnection(); // 打开该URL连接
+                    connection.setRequestMethod("GET"); // 设置请求方法，“POST或GET”，我们这里用GET，在说到POST的时候再用POST
+                    connection.setConnectTimeout(8000); // 设置连接建立的超时时间
+                    connection.setReadTimeout(8000); // 设置网络报文收发超时时间
+                    InputStream in = connection.getInputStream();  // 通过连接的输入流获取下发报文，然后就是Java的流处理
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    response_style = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null){
+                        response_style.append(line);
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    JSONArray a = new JSONArray(response_style.toString());
+                    for (int i = 0;i < a.length();i++) {
+                        JSONObject b = a.getJSONObject(i);
+                        Style_BuildStyleID.put(b.getString("id"),b.getString("BuildStyleID"));
+                        Style_Name.put(b.getString("BuildStyleID"),b.getString("Name"));
+                        Style_Style.put(b.getString("BuildStyleID"),b.getString("Style"));
+                        Style_Picture.put(b.getString("BuildStyleID"),url + b.getString("Picture"));
+                        Style_CurrentUse.put(b.getString("BuildStyleID"),b.getString("CurrentUse"));
+                        Style_HistoricalValue.put(b.getString("BuildStyleID"),b.getString("HistoricalValue"));
+                    }
+                    Message msg = new Message();
+                    msg.what = 4;
+                    handler.sendMessage(msg);
+                }
+                catch (JSONException e){
                     e.printStackTrace();
                 }
             }

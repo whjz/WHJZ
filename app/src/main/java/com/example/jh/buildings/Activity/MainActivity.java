@@ -76,7 +76,7 @@ public class MainActivity extends Activity{
 
     //从buildingstyle中读取出的数据
     Map<String,String> Style_Name = new HashMap<>();
-    Map<String,String> Style_RepresentativeBuildIntroduction = new HashMap<>();
+    Map<String,String> Style_BuildStyleIntroduction = new HashMap<>();
     Map<String,String> Style_Style = new HashMap<>();
     Map<String,String> Style_Picture = new HashMap<>();
     Map<String,String> Style_CurrentUse = new HashMap<>();
@@ -224,6 +224,7 @@ public class MainActivity extends Activity{
                         LinearLayout layout = (LinearLayout)findViewById(R.id.Construction_style);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                         TextView tv = new TextView(getApplicationContext());
+
                         tv.setText(Style_Name.get(bundle3.getString("styleid")));
                         tv.setTextColor(Color.parseColor("#3399FF"));
                         tv.setTextSize(13);
@@ -239,7 +240,7 @@ public class MainActivity extends Activity{
                         bundle.putString("style",Style_Style.get(getKey));
                         bundle.putString("currentuse",Style_CurrentUse.get(getKey));
                         bundle.putString("historicalvalue",Style_HistoricalValue.get(getKey));
-                        bundle.putString("representativebuildintroduction",Style_RepresentativeBuildIntroduction.get(getKey));
+                        bundle.putString("BuildStyleIntroduction",Style_BuildStyleIntroduction.get(getKey));
                         final Intent i = new Intent(MainActivity.this,Style.class);
                         i.putExtras(bundle);
                         tv.setOnClickListener(new View.OnClickListener() {
@@ -418,6 +419,7 @@ public class MainActivity extends Activity{
                             }
                             //tv.setText(UseChange_ChangeTime.get(getKey)+":"+UseChange_ChangeOverview.get(getKey));
                             tv.setTextColor(Color.parseColor("#000000"));
+                            tv.setLineSpacing(0,1.5f);
                             layoutParams.setMargins(60,0,20,30);
                             layout.addView(tv,layoutParams);
 
@@ -730,6 +732,7 @@ public class MainActivity extends Activity{
 
 
     public void requestUsingHttpURLConnectionGetBuildingStyle(){
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -754,17 +757,19 @@ public class MainActivity extends Activity{
                 }
 
                 try {
+
                     JSONArray a = new JSONArray(response_style.toString());
                     for (int i = 0;i < a.length();i++) {
                         JSONObject b = a.getJSONObject(i);
                         Style_BuildStyleID.put(b.getString("id"),b.getString("BuildStyleID"));
                         Style_Name.put(b.getString("BuildStyleID"),b.getString("Name"));
-                        Style_RepresentativeBuildIntroduction.put(b.getString("id"),b.getString("RepresentativeBuildIntroduction"));
+                        Style_BuildStyleIntroduction.put(b.getString("id"),b.getString("BuildStyleIntroduction"));
                         Style_Style.put(b.getString("id"),b.getString("Style"));
                         Style_Picture.put(b.getString("id"),url + b.getString("Picture"));
                         Style_CurrentUse.put(b.getString("id"),b.getString("CurrentUse"));
                         Style_HistoricalValue.put(b.getString("id"),b.getString("HistoricalValue"));
                     }
+
                     Message msg = new Message();
                     msg.what = 3;
                     handler.sendMessage(msg);

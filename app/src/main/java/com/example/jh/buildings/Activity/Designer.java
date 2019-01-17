@@ -71,24 +71,24 @@ public class Designer extends Activity{
                 else {tx_birthday.setText(birthday);}
 
                 //其他代表作品简介
-                String otherworksintroduction = bundle.getString("otherworksintroduction");
-                TextView tx_otherworksintroduction = (TextView )findViewById(R.id.designer_other);
-                LinearLayout works_intro0 = (LinearLayout)findViewById(R.id.works_intro0);
-                LinearLayout works_intro1 = (LinearLayout)findViewById(R.id.works_intro1);
-                LinearLayout works_intro2 = (LinearLayout)findViewById(R.id.works_intro2);
-                if (otherworksintroduction.equals("null")){
-                    works_intro0.setVisibility(View.GONE);
-                    works_intro1.setVisibility(View.GONE);
-                    works_intro2.setVisibility(View.GONE);
-                }
-                else {
-                    tx_otherworksintroduction.setMovementMethod(LinkMovementMethod.getInstance());
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                        tx_otherworksintroduction.setText(Html.fromHtml(otherworksintroduction,Html.FROM_HTML_MODE_COMPACT));
-                    }
-                    else{
-                        tx_otherworksintroduction.setText(Html.fromHtml(otherworksintroduction));
-                    }}
+//                String otherworksintroduction = bundle.getString("otherworksintroduction");
+//                TextView tx_otherworksintroduction = (TextView )findViewById(R.id.designer_other);
+//                LinearLayout works_intro0 = (LinearLayout)findViewById(R.id.works_intro0);
+//                LinearLayout works_intro1 = (LinearLayout)findViewById(R.id.works_intro1);
+//                LinearLayout works_intro2 = (LinearLayout)findViewById(R.id.works_intro2);
+//                if (otherworksintroduction.equals("null")){
+//                    works_intro0.setVisibility(View.GONE);
+//                    works_intro1.setVisibility(View.GONE);
+//                    works_intro2.setVisibility(View.GONE);
+//                }
+//                else {
+//                    tx_otherworksintroduction.setMovementMethod(LinkMovementMethod.getInstance());
+//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+//                        tx_otherworksintroduction.setText(Html.fromHtml(otherworksintroduction,Html.FROM_HTML_MODE_COMPACT));
+//                    }
+//                    else{
+//                        tx_otherworksintroduction.setText(Html.fromHtml(otherworksintroduction));
+//                    }}
 
                 String sex = bundle.getString("sex");
                 TextView tx_sex = (TextView)findViewById(R.id.designer_sex);

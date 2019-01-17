@@ -250,9 +250,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp">
+                >
 
-                <!--
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
@@ -260,7 +260,6 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/icon8"/>
-                    -->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -315,9 +314,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp">
+                >
 
-                <!--
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
@@ -325,7 +324,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/icon6" />
-                -->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -345,71 +344,71 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/works_intro0"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                >
+            <!--<LinearLayout-->
+                <!--android:id="@+id/works_intro0"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--&gt;-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:background="#C9C9C9"
-                    />
-            </LinearLayout>
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="10dp"-->
+                    <!--android:background="#C9C9C9"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:id="@+id/works_intro1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/works_intro1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginLeft="20dp">-->
 
-                <!--
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/icon8"/>
-                    -->
+                <!--&lt;!&ndash;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="left"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:src="@drawable/icon8"/>-->
+                    <!--&ndash;&gt;-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:hint="其他代表作品简介"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColorHint="#000000"/>
-            </LinearLayout>
-
-
-
-            <LinearLayout
-                android:id="@+id/works_intro2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <TextView
-                    android:id="@+id/designer_other"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="5dp"
-                    android:textColor="#000000"
-                    android:lineSpacingMultiplier="1.5"
-                    android:textColorLink="#3399FF"
-                    />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:hint="其他代表作品简介"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textColorHint="#000000"/>-->
+            <!--</LinearLayout>-->
 
 
-            </LinearLayout>
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/works_intro2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--&gt;-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/designer_other"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="left"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="20dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:textColor="#000000"-->
+                    <!--android:lineSpacingMultiplier="1.5"-->
+                    <!--android:textColorLink="#3399FF"-->
+                    <!--/>-->
+
+
+            <!--</LinearLayout>-->
 
 
             <LinearLayout
@@ -432,17 +431,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp">
+                >
 
-                <!--
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_gravity="left"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/icon8"/>
-                   -->
+                    android:src="@drawable/icon15"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
