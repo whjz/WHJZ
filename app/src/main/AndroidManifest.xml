@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="历史建筑"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 

@@ -67,7 +67,8 @@ public class PictureListAdapter extends BaseAdapter {
         else {
             viewHolder.picturename.setMovementMethod(LinkMovementMethod.getInstance());
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                viewHolder.pictureintroduce.setText(Html.fromHtml(intro,Html.FROM_HTML_MODE_COMPACT));
+                viewHolder.picturename.setText(Html.fromHtml(intro));
+//                viewHolder.pictureintroduce.setText(Html.fromHtml(intro,Html.FROM_HTML_MODE_COMPACT));
             }
             else{
                 viewHolder.picturename.setText(Html.fromHtml(intro));
